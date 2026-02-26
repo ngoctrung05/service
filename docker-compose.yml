@@ -1,0 +1,57 @@
+version: "3.8"
+
+services:
+  # 1. API Server
+  # api-server:
+  #   build: .
+  #   container_name: celestia-api-go
+  #   command: api-server
+  #   env_file: .env
+  #   network_mode: "host"
+  #   restart: unless-stopped
+  api-server:
+    build: .
+    container_name: celestia-api-go
+    command: /usr/local/bin/api-server
+    working_dir: /app
+    volumes:
+      - ./:/app
+    env_file:
+      - .env
+    network_mode: "host"
+    restart: unless-stopped
+
+  # 2. Bot Go
+  # data-bot:
+  #   build: .
+  #   container_name: celestia-bot-go
+  #   command: data-bot
+  #   volumes:
+  #     - ./dataSubmit:/app/dataSubmit
+  #     - ./public_index.json:/app/public_index.json
+  #     - ./public_full_meta.json:/app/public_full_meta.json
+  #   network_mode: "host"
+  #   restart: unless-stopped
+
+  # 3. Bot JS
+  # babylon-upload-bot-js:
+  #   build: .
+  #   container_name: babylon-upload-bot-js
+  #   command: node /app/js-bot/index.js
+  #   volumes:
+  #     - ./js-bot/logs:/app/js-bot/logs
+  #   env_file: .env
+  #   network_mode: "host"
+  #   restart: unless-stopped
+
+  # # 4. Submiiter to DAL
+  # submitter:
+  #   build: .
+  #   container_name: submitter
+  #   command: /usr/local/bin/submitter
+  #   working_dir: /app
+  #   volumes:
+  #     - ./dataSubmit:/app/dataSubmit
+  #   env_file: .env
+  #   network_mode: "host"
+  #   restart: unless-stopped
