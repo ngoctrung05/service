@@ -1,0 +1,25 @@
+{
+  "name": "btc-da",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@cosmjs/proto-signing": "^0.38.1",
+    "@cosmjs/stargate": "^0.38.1",
+    "axios": "^1.13.4",
+    "bitcoinjs-lib": "^7.0.1",
+    "crypto-js": "^4.2.0",
+    "dotenv": "^17.2.3",
+    "ecpair": "^3.0.0",
+    "merkletreejs": "^0.6.0",
+    "tiny-secp256k1": "^2.2.4",
+    "winston": "^3.11.0"
+  }
+}
