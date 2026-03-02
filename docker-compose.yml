@@ -37,9 +37,9 @@ services:
   # babylon-upload-bot-js:
   #   build: .
   #   container_name: babylon-upload-bot-js
-  #   command: node /app/js-bot/index.js
+  #   command: node /app/anchor-bot/index.js
   #   volumes:
-  #     - ./js-bot/logs:/app/js-bot/logs
+  #     - ./anchor-bot/logs:/app/anchor-bot/logs
   #   env_file: .env
   #   network_mode: "host"
   #   restart: unless-stopped

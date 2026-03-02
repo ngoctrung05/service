@@ -1,6 +1,8 @@
 .env
 tempFile/
-anchor-bot/
+anchor-bot/node_modules/
+anchor-bot/logs/
+anchor-bot/package-lock.json
 tempFile/
 benchmark/
 benchmark2/

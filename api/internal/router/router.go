@@ -12,6 +12,7 @@ func SetupRoutes(r *gin.Engine, h *handler.Handler) {
 	r.GET("/get-height-namespace", h.GetHeightNamespaceHandler)
 	r.GET("/retrieve-meta", h.RetrieveMetaHandler)
 	r.GET("/get-blob-data", h.GetBlobDataHandler)
+	r.GET("/trace", h.GetTraceHandler)
 
 	r.POST("/submit-file", h.SubmitLargeDataHandler)
 	r.POST("/submit", h.SubmitDataHandler)

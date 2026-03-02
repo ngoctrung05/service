@@ -35,4 +35,14 @@ var (
 	MaxConcurrency    = getEnvInt("MAX_CONCURRENCY", 12)
 	MaxMultipartBytes = getEnvInt("MAX_MULTIPART_BYTES", 128<<20)
 	BridgeToken       = getEnv("BRIDGE_TOKEN", "")
+
+	BabylonAPIURL = getEnv("BABYLON_API_URL", "https://babylon-testnet-api.nodes.guru")
+	MempoolAPIURL = getEnv("MEMPOOL_API_URL", "https://mempool.space/signet/api")
+	EngramURL     = getEnv("ENGRAM_URL", "https://engram.a-star.group")
+
+	FileHeightMap      = getEnv("FILE_HEIGHT_MAP", "../anchor-bot/logs/height-epoch-map.jsonl")
+	FileAnchorReceipts = getEnv("FILE_ANCHOR_RECEIPTS", "../anchor-bot/logs/babylon-anchor-receipts.jsonl")
+
+	BitcoinExplorerURL = getEnv("BITCOIN_EXPLORER_URL", "https://mempool.space/signet")
+	BabylonExplorerURL = getEnv("BABYLON_EXPLORER_URL", "https://babylon-testnet-explorer.nodes.guru")
 )

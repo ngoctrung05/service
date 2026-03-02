@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"sort"
 	"strconv"
+	"strings"
 	"time"
 
 	"api/api/internal/config"
@@ -280,4 +281,34 @@ func (h *Handler) RetrieveMetaHandler(c *gin.Context) {
 	_ = storage.LoadFile(config.FileFullMeta, &allMeta)
 	results := storage.FilterMetadata(allMeta, height, nsHex)
 	c.JSON(200, gin.H{"count": len(results), "blobs": results})
+}
+
+// Bạn thêm hàm này vào file handler.go hiện tại
+func (h *Handler) GetTraceHandler(c *gin.Context) {
+	txHash := c.Query("hash")
+
+	if txHash == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Thiếu tham số hash giao dịch (tx_hash)"})
+		return
+	}
+
+	traceData, err := service.BuildTrace(txHash)
+	if err != nil {
+		errStr := err.Error()
+		if strings.Contains(strings.ToLower(errStr), "not found") {
+			c.JSON(http.StatusNotFound, gin.H{
+				"error":   "Không tìm thấy dữ liệu truy vết",
+				"details": errStr,
+			})
+			return
+		}
+
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   "Lỗi hệ thống khi truy vết giao dịch",
+			"details": errStr,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, traceData)
 }

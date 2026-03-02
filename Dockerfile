@@ -17,9 +17,9 @@ WORKDIR /app
 
 COPY --from=builder /bin/api-server /usr/local/bin/api-server
 
-# COPY js-bot/ ./js-bot/
-# RUN cd js-bot && npm install
-# RUN mkdir -p /app/js-bot/logs
+# COPY anchor-bot/ ./anchor-bot/
+# RUN cd anchor-bot && npm install
+# RUN mkdir -p /app/anchor-bot/logs
 
 EXPOSE 2999
 

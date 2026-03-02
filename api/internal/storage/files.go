@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"bufio"
 	"encoding/json"
 	"os"
 	"strings"
@@ -82,4 +83,59 @@ func SaveDataToFiles(newBlobs []model.BlobMetadata) error {
 	}
 
 	return nil
+}
+
+func FindBatchInfoByHeight(height uint64) (model.HeightMapRecord, model.AnchorReceipt, bool) {
+	var hRec model.HeightMapRecord
+	var rRec model.AnchorReceipt
+	var foundHeight bool
+
+	// ==========================================
+	// BƯỚC 1: Quét file height-epoch-map.jsonl
+	// ==========================================
+	f1, err := os.Open(config.FileHeightMap)
+	if err != nil {
+		return hRec, rRec, false
+	}
+	defer f1.Close()
+
+	scanner1 := bufio.NewScanner(f1)
+	for scanner1.Scan() {
+		var tempRec model.HeightMapRecord
+		if err := json.Unmarshal(scanner1.Bytes(), &tempRec); err == nil {
+			if tempRec.Height == int(height) {
+				hRec = tempRec
+				foundHeight = true
+				break
+			}
+		}
+	}
+
+	if err := scanner1.Err(); err != nil || !foundHeight {
+		return hRec, rRec, false
+	}
+
+	// ==========================================
+	// BƯỚC 2: Quét file babylon-anchor-receipts.jsonl
+	// ==========================================
+	var foundReceipt bool
+	f2, err := os.Open(config.FileAnchorReceipts)
+	if err != nil {
+		return hRec, rRec, false
+	}
+	defer f2.Close()
+
+	scanner2 := bufio.NewScanner(f2)
+	for scanner2.Scan() {
+		var tempRec model.AnchorReceipt
+		if err := json.Unmarshal(scanner2.Bytes(), &tempRec); err == nil {
+			if tempRec.Batch == hRec.Batch {
+				rRec = tempRec
+				foundReceipt = true
+				break
+			}
+		}
+	}
+
+	return hRec, rRec, foundReceipt
 }
