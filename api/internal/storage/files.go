@@ -3,7 +3,9 @@ package storage
 import (
 	"bufio"
 	"encoding/json"
+	"fmt"
 	"os"
+	"sort"
 	"strings"
 	"sync"
 
@@ -103,6 +105,7 @@ func FindBatchInfoByHeight(height uint64) (model.HeightMapRecord, model.AnchorRe
 	for scanner1.Scan() {
 		var tempRec model.HeightMapRecord
 		if err := json.Unmarshal(scanner1.Bytes(), &tempRec); err == nil {
+			fmt.Println(scanner1.Bytes())
 			if tempRec.Height == int(height) {
 				hRec = tempRec
 				foundHeight = true
@@ -137,5 +140,38 @@ func FindBatchInfoByHeight(height uint64) (model.HeightMapRecord, model.AnchorRe
 		}
 	}
 
+	if err := scanner2.Err(); err != nil || !foundReceipt {
+		return hRec, rRec, false
+	}
+
 	return hRec, rRec, foundReceipt
+}
+
+func GetAllHashesInBatch(batchID int) ([]string, error) {
+	f, err := os.Open(config.FileHeightMap)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+
+	var records []model.HeightMapRecord
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		var rec model.HeightMapRecord
+		if err := json.Unmarshal(scanner.Bytes(), &rec); err == nil {
+			if rec.Batch == batchID {
+				records = append(records, rec)
+			}
+		}
+	}
+
+	sort.Slice(records, func(i, j int) bool {
+		return records[i].IndexInBatch < records[j].IndexInBatch
+	})
+
+	var leaves []string
+	for _, r := range records {
+		leaves = append(leaves, r.Hash)
+	}
+	return leaves, nil
 }
